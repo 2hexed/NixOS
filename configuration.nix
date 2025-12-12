@@ -10,7 +10,11 @@ let
   };
 
 in {
-  imports = [ ./hardware-configuration.nix /home/nick/Documents/chromium.nix ];
+  imports = [
+    ./hardware-configuration.nix
+    /home/nick/Documents/chromium.nix
+    /home/nick/Documents/brave.nix
+  ];
 
   zramSwap.enable = true;
   time.timeZone = "Asia/Kolkata";
@@ -25,14 +29,14 @@ in {
     platformTheme = "gnome";
   };
 
-  # security.sudo.extraRules = [{
-  #   groups = [ "wheel" ];
-  #   commands = [{
-  #     options = [ "NOPASSWD" ];
-  #     command =
-  #       "/usr/bin/tee /sys/bus/platform/drivers/ideapad_acpi/VPC????:??/conservation_mode";
-  #   }];
-  # }];
+  security.sudo.extraRules = [{
+    groups = [ "wheel" ];
+    commands = [{
+      options = [ "NOPASSWD" ];
+      command =
+        "/run/current-system/sw/bin/tee /sys/bus/platform/drivers/ideapad_acpi/VPC????\\:??/conservation_mode";
+    }];
+  }];
 
   boot = {
     plymouth.enable = true;
@@ -88,13 +92,9 @@ in {
   services = {
     fstrim.enable = true;
     switcherooControl.enable = true;
-    displayManager.gdm.enable = true;
-    desktopManager.gnome.enable = true;
-
-    porn-vault = {
-      enable = true;
-      openFirewall = true;
-    };
+    system76-scheduler.enable = true;
+    desktopManager.cosmic.enable = true;
+    displayManager.cosmic-greeter.enable = true;
 
     jellyfin = {
       enable = true;
@@ -112,8 +112,8 @@ in {
     isNormalUser = true;
     description = "Nick";
     extraGroups = [ "audio" "video" "wheel" "networkmanager" ];
-    packages = (with pkgs; [
-      brave
+    packages = with pkgs; [
+      delfin
       smassh
       picard
       spotify
@@ -123,9 +123,9 @@ in {
       mkvtoolnix
       qbittorrent
       drum-machine
-      warp-terminal
       github-desktop
       element-desktop
+      telegram-desktop
       kdePackages.kdenlive
 
       (wrapOBS {
@@ -149,17 +149,7 @@ in {
           yy0931.vscode-sqlite3-editor
         ];
       })
-    ]) ++ (with pkgs.gnomeExtensions; [
-      ideapad
-      caffeine
-      light-style
-      status-icons
-      blur-my-shell
-      auto-accent-colour
-      night-theme-switcher
-      removable-drive-menu
-      privacy-indicators-accent-color
-    ]);
+    ];
   } // passwordConfiguration;
 
   programs = {
@@ -167,10 +157,7 @@ in {
     nix-ld.enable = true;
     starship.enable = true;
 
-    fzf = {
-      keybindings = true;
-      fuzzyCompletion = true;
-    };
+    fzf = { keybindings = true; };
 
     gamescope = {
       enable = true;
@@ -188,6 +175,36 @@ in {
       viAlias = true;
       vimAlias = true;
       defaultEditor = true;
+    };
+
+    brave = {
+      enable = true;
+
+      extensions = [
+        "nngceckbapebfimnlniiiahkandclblb" # BitWarden
+        "mlomiejdfkolichcflejclcbmpeaniij" # Ghostery
+        "pkehgijcmpdhfbdbbnkijodmdjhbjlgp" # Privacy Badger
+      ];
+
+      policies = {
+        brave = {
+          BraveNewsDisabled = true;
+          BraveAIChatEnabled = false;
+          PasswordManagerEnabled = false;
+          AutofillAddressEnabled = false;
+          MetricsReportingEnabled = false;
+          BrowserAddPersonEnabled = false;
+          DnsOverHttpsMode = "secure";
+          DnsOverHttpsTemplates =
+            "https://security.cloudflare-dns.com/dns-query{?dns}";
+          ClearBrowsingDataOnExitList = [
+            "cached_images_and_files"
+            "site_settings"
+            "browsing_history"
+            "download_history"
+          ];
+        };
+      };
     };
 
     chromium = {
@@ -237,7 +254,7 @@ in {
     };
 
     firefox = {
-      enable = true;
+      enable = false;
       languagePacks = [ "en-US" ];
       policies = {
         DisableTelemetry = true;
@@ -338,58 +355,9 @@ in {
           "sudoedit /etc/nixos/hardware-configuration.nix";
       };
     };
-
-    dconf = {
-      enable = true;
-      profiles.user.databases = [{
-        locks = [
-          "/org/gnome/shell/extensions/nightthemeswitcher/time/sunrise"
-          "/org/gnome/shell/extensions/nightthemeswitcher/time/sunset"
-        ];
-        settings = {
-          "org/gnome/desktop/interface" = { text-scaling-factor = 1.25; };
-          "org/gnome/shell/extensions/blur-my-shell/panel" = {
-            force-light-text = true;
-          };
-          "org/gnome/shell/extensions/nightthemeswitcher/time" = {
-            sunrise = 6.0;
-            sunset = 20.0;
-          };
-          "org/gnome/nautilus/preferences" = {
-            show-hidden = true;
-            click-policy = "single";
-            show-create-link = true;
-            show-delete-permanently = true;
-          };
-          "org/gnome/shell" = {
-            disable-user-extensions = false;
-            enabled-extensions = with pkgs; [
-              gnomeExtensions.ideapad.extensionUuid
-              gnomeExtensions.caffeine.extensionUuid
-              gnomeExtensions.light-style.extensionUuid
-              gnomeExtensions.status-icons.extensionUuid
-              gnomeExtensions.blur-my-shell.extensionUuid
-              gnomeExtensions.auto-accent-colour.extensionUuid
-              gnomeExtensions.removable-drive-menu.extensionUuid
-              gnomeExtensions.night-theme-switcher.extensionUuid
-              gnomeExtensions.privacy-indicators-accent-color.extensionUuid
-            ];
-          };
-        };
-      }];
-
-      profiles.gdm.databases = [{
-        settings = {
-          "org/gnome/desktop/interface" = { text-scaling-factor = 1.25; };
-        };
-      }];
-    };
   };
 
-  environment = {
-    gnome.excludePackages = with pkgs; [ epiphany geary ];
-    systemPackages = (with pkgs; [ gparted ]);
-  };
+  environment = { systemPackages = (with pkgs; [ gparted ]); };
 
   nixpkgs.config.allowUnfree = true;
 
@@ -407,4 +375,3 @@ in {
   system.stateVersion = "25.11";
 
 }
-
