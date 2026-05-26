@@ -440,6 +440,8 @@ in
         shortwave
         manga-tui
         vscode-fhs
+        windsurf
+        code-cursor-fhs
         antigravity
         video-trimmer
         github-desktop
