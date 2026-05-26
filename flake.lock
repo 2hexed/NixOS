@@ -253,8 +253,8 @@
         "treefmt-nix": "treefmt-nix_5"
       },
       "locked": {
-        "lastModified": 1779690094,
-        "narHash": "sha256-JKLe++bi1sq7slsGX0UjOMlcqyQz3N/88wMq6+32+MY=",
+        "lastModified": 1779792894,
+        "narHash": "sha256-9UpyjtsyQrW1Adq+8NvY2UzBpKqIiS8LA4lBY7jVHss=",
         "path": "/home/n/Documents/GitHub/starr",
         "type": "path"
       },

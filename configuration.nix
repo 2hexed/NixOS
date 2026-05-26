@@ -250,6 +250,11 @@ in
     desktopManager.gnome.enable = true;
     desktopManager.gnome.flashback.enableMetacity = true;
 
+    starr = {
+      enable = true;
+      secretsFile = "/var/lib/starr/starrToken";
+    };
+
     getty = {
       autologinUser = "n";
       autologinOnce = true;
