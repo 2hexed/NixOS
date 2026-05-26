@@ -73,7 +73,7 @@ let
     HomepageIsNewTabPage = false;
     PasswordManagerEnabled = false;
     ClearBrowsingDataOnExitList = [
-      "site_settings"
+      # "site_settings"
       "download_history"
     ];
   };
