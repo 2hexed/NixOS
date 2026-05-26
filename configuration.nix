@@ -253,6 +253,7 @@ in
     starr = {
       enable = true;
       secretsFile = "/var/lib/starr/starrToken";
+      ollama.model = "qwen3.5:2b";
     };
 
     getty = {
