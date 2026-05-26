@@ -618,11 +618,11 @@ in
       (pkgs.callPackage /home/n/Documents/GitHub/synclyr2metadata/package.nix { })
     ];
 
-    # interactiveShellInit = ''
-    #   if [[ $(tty) == "/dev/tty1" ]]; then
-    #     exec btm
-    #   fi
-    # '';
+    interactiveShellInit = ''
+      if [[ $(tty) == "/dev/tty1" ]]; then
+        exec btm
+      fi
+    '';
 
     gnome.excludePackages = with pkgs; [
       yelp

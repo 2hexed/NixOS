@@ -233,11 +233,11 @@
         "treefmt-nix": "treefmt-nix_4"
       },
       "locked": {
-        "lastModified": 1779704603,
-        "narHash": "sha256-KvNAGrCKwHybOPzyUu6NPjPOQwuMxwan76s73lpBu10=",
+        "lastModified": 1779800996,
+        "narHash": "sha256-9gJoWZsR+5ITxeJ8aK2jUU0TZEpt60s/xwceIC7OP48=",
         "owner": "snapsettle",
         "repo": "snapcore",
-        "rev": "d669d147258887cea12e155620633ca0721eb9e1",
+        "rev": "fbb82fd2a7ffe319a21b7b3dfbc189b8eac2d879",
         "type": "github"
       },
       "original": {
@@ -253,7 +253,7 @@
         "treefmt-nix": "treefmt-nix_5"
       },
       "locked": {
-        "lastModified": 1779795453,
+        "lastModified": 1779796771,
         "narHash": "sha256-9UpyjtsyQrW1Adq+8NvY2UzBpKqIiS8LA4lBY7jVHss=",
         "path": "/home/n/Documents/GitHub/starr",
         "type": "path"
