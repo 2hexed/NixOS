@@ -585,7 +585,7 @@ in
   };
 
   specialisation.gnome.configuration = {
-    services.xrdp = lib.mkForce {};
+    services.xrdp = lib.mkForce { enable = false; };
     services.displayManager.gdm.enable = true;
     services.desktopManager.gnome.enable = true;
     services.pulseaudio.enable = lib.mkForce false;
@@ -598,7 +598,7 @@ in
     };
 
     # FIX: GNOME RDP
-    networking.firewall.allowedTCPPorts = [ 3389 ];
+    networking.firewall.allowedTCPPorts = [ 3390 ];
 
     systemd.services.gnome-remote-desktop = {
       wantedBy = [ "graphical.target" ];
