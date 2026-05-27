@@ -232,21 +232,15 @@ in
     usbmuxd.enable = true;
     prowlarr.enable = true;
     flaresolverr.enable = true;
-    # pulseaudio.enable = true; # required by xfce
+    pulseaudio.enable = true; # required by xfce
     spice-vdagentd.enable = true;
     journald.storage = "volatile";
     gnome.gnome-keyring.enable = true;
-    gnome.gnome-remote-desktop.enable = true;
 
-    displayManager.gdm.enable = true;
-    desktopManager.gnome.enable = true;
-
-    displayManager.autoLogin.enable = false;
-
-    # getty = {
-    #   autologinUser = "n";
-    #   autologinOnce = true;
-    # };
+    getty = {
+      autologinUser = "n";
+      autologinOnce = true;
+    };
 
     logind.settings = {
       Login = {
@@ -288,8 +282,7 @@ in
     xrdp = {
       enable = true;
       openFirewall = true;
-      defaultWindowManager = "${pkgs.gnome-session}/bin/gnome-session";
-      # defaultWindowManager = "exec ${pkgs.dbus}/bin/dbus-run-session ${pkgs.xfce.xfce4-session}/bin/xfce4-session";
+      defaultWindowManager = "exec ${pkgs.dbus}/bin/dbus-run-session ${pkgs.xfce.xfce4-session}/bin/xfce4-session";
     };
 
     openssh = {
