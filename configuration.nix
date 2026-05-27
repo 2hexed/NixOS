@@ -247,8 +247,6 @@ in
     spice-vdagentd.enable = true;
     journald.storage = "volatile";
     gnome.gnome-keyring.enable = true;
-    desktopManager.gnome.enable = true;
-    desktopManager.gnome.flashback.enableMetacity = true;
 
     starr = {
       enable = true;
@@ -440,8 +438,6 @@ in
         shortwave
         manga-tui
         vscode-fhs
-        windsurf
-        code-cursor-fhs
         antigravity
         video-trimmer
         github-desktop
@@ -631,6 +627,18 @@ in
       geary
       epiphany
     ];
+  };
+
+  specialisation.gnome.configuration = {
+    services.pulseaudio.enable = lib.mkForce false;
+    services.displayManager.gdm.enable = true;
+    services.desktopManager.gnome.enable = true;
+
+    services.logind.settings.Login = {
+      HandleLidSwitch = lib.mkForce null;
+      HandleLidSwitchExternalPower = lib.mkForce null;
+      HandleLidSwitchDocked = lib.mkForce null;
+    };
   };
 
   system.stateVersion = "25.11";
