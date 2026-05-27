@@ -142,10 +142,16 @@ in
   ];
 
   zramSwap.enable = true;
+  system.stateVersion = "25.11";
   time.timeZone = "Asia/Kolkata";
   nixpkgs.config.allowUnfree = true;
   systemd.tmpfiles.rules = mediaRules ++ laptopRules;
   # disabledModules = [ "services/desktops/blueman.nix" ];
+
+  # GNOME RDP FIX
+  systemd.services.gnome-remote-desktop = {
+      wantedBy = [ "graphical.target" ];
+    };
 
   nix = {
     optimise.automatic = true;
@@ -188,11 +194,10 @@ in
     firewall = {
       allowedTCPPorts = [
         0800 # kodi remote
-        3000
+        3389 # GNOME RDP PORT
       ];
       allowedUDPPorts = [
         9777 # kodi remote
-        3000
       ];
     };
 
@@ -232,10 +237,10 @@ in
     usbmuxd.enable = true;
     prowlarr.enable = true;
     flaresolverr.enable = true;
-    pulseaudio.enable = true; # required by xfce
     spice-vdagentd.enable = true;
     journald.storage = "volatile";
-    gnome.gnome-keyring.enable = true;
+displayManager.gdm.enable = true;
+desktopManager.gnome.enable = true;
 
     getty = {
       autologinUser = "n";
@@ -279,11 +284,11 @@ in
     #   };
     # };
 
-    xrdp = {
-      enable = true;
-      openFirewall = true;
-      defaultWindowManager = "exec ${pkgs.dbus}/bin/dbus-run-session ${pkgs.xfce.xfce4-session}/bin/xfce4-session";
-    };
+    # xrdp = {
+    #   enable = true;
+    #   openFirewall = true;
+    #   defaultWindowManager = "exec ${pkgs.dbus}/bin/dbus-run-session ${pkgs.xfce.xfce4-session}/bin/xfce4-session";
+    # };
 
     openssh = {
       enable = true;
@@ -392,12 +397,9 @@ in
   users.users.n = {
     isNormalUser = true;
     description = "Nick";
-    initialPassword = "nicepassword69"; # Run: mkpasswd
+    initialPassword = "nicepassword69"; # passwd or mkpasswd
 
     extraGroups = [
-      "audio"
-      "video"
-      "render"
       "wheel"
       "networkmanager"
     ];
@@ -405,10 +407,7 @@ in
     packages =
       with pkgs;
       [
-        xclip # x11 clipboard
-        wl-clipboard # Wayland clipboard
-
-        xdg-utils
+        # xdg-utils
         peazip
 
         smassh
@@ -427,7 +426,7 @@ in
         bitwarden-desktop
 
         # xfce4-whiskermenu-plugin
-        xfce.xfce4-whiskermenu-plugin
+        # xfce.xfce4-whiskermenu-plugin
       ]
       ++ gnomeUserExtensions;
   };
@@ -436,7 +435,6 @@ in
     git.enable = true;
     nix-ld.enable = true;
     starship.enable = true;
-    seahorse.enable = true;
     gitgetter.enable = true;
 
     fzf = {
@@ -577,26 +575,4 @@ in
     ];
   };
 
-  specialisation.gnome.configuration = {
-    services.xrdp = lib.mkForce { enable = false; };
-    services.displayManager.gdm.enable = true;
-    services.desktopManager.gnome.enable = true;
-    services.pulseaudio.enable = lib.mkForce false;
-    environment.interactiveShellInit = lib.mkForce "";
-
-    services.logind.settings.Login = {
-      HandleLidSwitch = lib.mkForce null;
-      HandleLidSwitchExternalPower = lib.mkForce null;
-      HandleLidSwitchDocked = lib.mkForce null;
-    };
-
-    # FIX: GNOME RDP
-    networking.firewall.allowedTCPPorts = [ 3389 ];
-
-    systemd.services.gnome-remote-desktop = {
-      wantedBy = [ "graphical.target" ];
-    };
-  };
-
-  system.stateVersion = "25.11";
 }
