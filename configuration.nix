@@ -132,17 +132,17 @@ let
       disable-user-extensions = false;
       disable-extension-version-validation = true;
       enabled-extensions = map (ext: ext.extensionUuid) gnomeUserExtensions;
-      favorite-apps = [
-        "org.gnome.snapshot.desktop"
-        "google-chrome.desktop"
-        "org.gnome.calendar.desktop"
-        "org.gnome.music.desktop"
-        "org.gnome.nautilus.desktop"
-        "org.gnome.texteditor.desktop"
-        "org.gnome.console.desktop"
-        "antigravity.desktop"
-        "element-desktop.desktop"
-      ];
+      # favorite-apps = [
+      #   "org.gnome.snapshot.desktop"
+      #   "google-chrome.desktop"
+      #   "org.gnome.calendar.desktop"
+      #   "org.gnome.music.desktop"
+      #   "org.gnome.nautilus.desktop"
+      #   "org.gnome.texteditor.desktop"
+      #   "org.gnome.console.desktop"
+      #   "antigravity.desktop"
+      #   "element-desktop.desktop"
+      # ];
     };
   };
 in
@@ -248,12 +248,6 @@ in
     journald.storage = "volatile";
     gnome.gnome-keyring.enable = true;
 
-    starr = {
-      enable = true;
-      secretsFile = "/var/lib/starr/starrToken";
-      ollama.model = "qwen3.5:2b";
-    };
-
     getty = {
       autologinUser = "n";
       autologinOnce = true;
@@ -287,7 +281,7 @@ in
     #   enable = true;
     #   package = pkgs.ollama-cuda;
     #   acceleration = "cuda";
-    #   loadModels = [ "qwen2.5:7b" ]; # [ "deepseek-r1:7b" ];
+    #   loadModels = [ "qwen3.5:2b" ]; # [ "qwen2.5:7b" ]; # [ "deepseek-r1:7b" ];
     #   syncModels = true;
 
     #   environmentVariables = {
@@ -468,30 +462,6 @@ in
         obs-backgroundremoval
       ];
     };
-
-    # vscode = {
-    #   enable = true;
-    #   package = pkgs.vscode-fhs;
-
-    #   # enterprisepolicies = {
-    #   #   "telemetrylevel" = "off";
-    #   #   "updatemode" = "none";
-    #   # };
-
-    #   # extensions = with pkgs.vscode-extensions; [
-    #   #   # languages
-    #   #   golang.go
-    #   #   ms-python.python
-    #   #   mads-hartmann.bash-ide-vscode
-    #   #   # linters / formatters / related
-    #   #   ms-python.pylint
-    #   #   ms-python.vscode-pylance
-    #   #   jeff-hykin.better-nix-syntax
-    #   #   # misc
-    #   #   yzane.markdown-pdf
-    #   #   yy0931.vscode-sqlite3-editor
-    #   # ];
-    # };
 
     google-chrome = {
       enable = true;

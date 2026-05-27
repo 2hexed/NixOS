@@ -1,7 +1,6 @@
 {
   inputs = {
     snapcore.url = "github:snapsettle/snapcore";
-    starr.url = "/home/n/Documents/GitHub/starr";
     nixpkgs.url = "github:nixos/nixpkgs/nixos-25.11";
 
     treefmt-nix.url = "github:numtide/treefmt-nix";
@@ -31,7 +30,6 @@
         specialArgs = { inherit inputs; };
         modules = [
           ./configuration.nix
-          inputs.starr.nixosModules.default
           inputs.snapcore.nixosModules.snapcore.default
         ];
       };
