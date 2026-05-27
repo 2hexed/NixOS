@@ -591,7 +591,7 @@ in
     };
 
     # FIX: GNOME RDP
-    networking.firewall.allowedTCPPorts = [ 3390 ];
+    networking.firewall.allowedTCPPorts = [ 3389 ];
 
     systemd.services.gnome-remote-desktop = {
       wantedBy = [ "graphical.target" ];
