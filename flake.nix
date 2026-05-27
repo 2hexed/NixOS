@@ -30,7 +30,7 @@
         specialArgs = { inherit inputs; };
         modules = [
           ./configuration.nix
-          inputs.snapcore.nixosModules.snapcore.default
+          inputs.snapcore.nixosModules.default
         ];
       };
     };
