@@ -79,9 +79,9 @@ let
   };
 
   dconfUserSettings = {
-    # "org/gnome/desktop/remote-desktop/rdp" = {
-    #    screen-share-mode = "extend";
-    # };
+    "org/gnome/desktop/remote-desktop/rdp" = {
+       screen-share-mode = "extend";
+    };
     "org/gnome/desktop/peripherals/touchpad" = {
       send-events = "disabled-on-external-mouse";
     };
@@ -132,17 +132,6 @@ let
       disable-user-extensions = false;
       disable-extension-version-validation = true;
       enabled-extensions = map (ext: ext.extensionUuid) gnomeUserExtensions;
-      # favorite-apps = [
-      #   "org.gnome.snapshot.desktop"
-      #   "google-chrome.desktop"
-      #   "org.gnome.calendar.desktop"
-      #   "org.gnome.music.desktop"
-      #   "org.gnome.nautilus.desktop"
-      #   "org.gnome.texteditor.desktop"
-      #   "org.gnome.console.desktop"
-      #   "antigravity.desktop"
-      #   "element-desktop.desktop"
-      # ];
     };
   };
 in
@@ -243,15 +232,21 @@ in
     usbmuxd.enable = true;
     prowlarr.enable = true;
     flaresolverr.enable = true;
-    pulseaudio.enable = true; # required by xfce
+    # pulseaudio.enable = true; # required by xfce
     spice-vdagentd.enable = true;
     journald.storage = "volatile";
     gnome.gnome-keyring.enable = true;
+    gnome.gnome-remote-desktop.enable = true;
 
-    getty = {
-      autologinUser = "n";
-      autologinOnce = true;
-    };
+    displayManager.gdm.enable = true;
+    desktopManager.gnome.enable = true;
+
+    displayManager.autoLogin.enable = false;
+
+    # getty = {
+    #   autologinUser = "n";
+    #   autologinOnce = true;
+    # };
 
     logind.settings = {
       Login = {
@@ -293,7 +288,8 @@ in
     xrdp = {
       enable = true;
       openFirewall = true;
-      defaultWindowManager = "exec ${pkgs.dbus}/bin/dbus-run-session ${pkgs.xfce.xfce4-session}/bin/xfce4-session";
+      defaultWindowManager = "${pkgs.gnome-session}/bin/gnome-session";
+      # defaultWindowManager = "exec ${pkgs.dbus}/bin/dbus-run-session ${pkgs.xfce.xfce4-session}/bin/xfce4-session";
     };
 
     openssh = {
@@ -383,7 +379,7 @@ in
       enable = false;
       enableTearFree = true;
       updateDbusEnvironment = true;
-      desktopManager.xfce.enable = true;
+      # desktopManager.xfce.enable = true;
 
       videoDrivers = [
         "nvidia"
@@ -566,17 +562,6 @@ in
     #   # chromium-specific policies (merged after extraopts)
     #   policies = sharedPolicies;
     # };
-
-    bash = {
-      shellAliases = {
-        ".." = "cd ..";
-        "e" = "''$EDITOR";
-        "nix_clean" = "nix-collect-garbage -d && sudo nix-collect-garbage -d";
-        "flake.nix" = "sudoedit /etc/nixos/flake.nix";
-        "configuration.nix" = "sudoedit /etc/nixos/configuration.nix";
-        "hardware-configuration.nix" = "sudoedit /etc/nixos/hardware-configuration.nix";
-      };
-    };
   };
 
   environment = {
@@ -586,11 +571,11 @@ in
       (pkgs.callPackage /home/n/Documents/GitHub/synclyr2metadata/package.nix { })
     ];
 
-    interactiveShellInit = ''
-      if [[ $(tty) == "/dev/tty1" ]]; then
-        exec btm
-      fi
-    '';
+    # interactiveShellInit = ''
+    #   if [[ $(tty) == "/dev/tty1" ]]; then
+    #     exec btm
+    #   fi
+    # '';
 
     gnome.excludePackages = with pkgs; [
       yelp
@@ -600,14 +585,23 @@ in
   };
 
   specialisation.gnome.configuration = {
-    services.pulseaudio.enable = lib.mkForce false;
+    services.xrdp = lib.mkForce {};
     services.displayManager.gdm.enable = true;
     services.desktopManager.gnome.enable = true;
+    services.pulseaudio.enable = lib.mkForce false;
+    environment.interactiveShellInit = lib.mkForce "";
 
     services.logind.settings.Login = {
       HandleLidSwitch = lib.mkForce null;
       HandleLidSwitchExternalPower = lib.mkForce null;
       HandleLidSwitchDocked = lib.mkForce null;
+    };
+
+    # FIX: GNOME RDP
+    networking.firewall.allowedTCPPorts = [ 3389 ];
+
+    systemd.services.gnome-remote-desktop = {
+      wantedBy = [ "graphical.target" ];
     };
   };
 
