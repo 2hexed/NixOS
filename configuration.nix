@@ -424,6 +424,7 @@ desktopManager.gnome.enable = true;
         video-trimmer
         github-desktop
         bitwarden-desktop
+        inkscape-with-extensions
 
         # xfce4-whiskermenu-plugin
         # xfce.xfce4-whiskermenu-plugin
