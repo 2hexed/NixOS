@@ -80,7 +80,7 @@ let
 
   dconfUserSettings = {
     "org/gnome/desktop/wm/preferences" = {
-      focus-mode = "sloppy"; # or 'mouse'
+      focus-mode = "mouse"; # 'sloppy' or 'mouse'
     };
     "org/gnome/desktop/remote-desktop/rdp" = {
        screen-share-mode = "extend";
