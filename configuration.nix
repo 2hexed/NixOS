@@ -80,10 +80,11 @@ let
 
   dconfUserSettings = {
     "org/gnome/desktop/wm/preferences" = {
-      focus-mode = "mouse"; # 'sloppy' or 'mouse'
+      focus-mode = "sloppy"; # 'sloppy' or 'mouse'
+      auto-raise = true;
     };
     "org/gnome/desktop/remote-desktop/rdp" = {
-       screen-share-mode = "extend";
+      screen-share-mode = "extend";
     };
     "org/gnome/desktop/peripherals/touchpad" = {
       send-events = "disabled-on-external-mouse";
@@ -153,8 +154,8 @@ in
 
   # GNOME RDP FIX
   systemd.services.gnome-remote-desktop = {
-      wantedBy = [ "graphical.target" ];
-    };
+    wantedBy = [ "graphical.target" ];
+  };
 
   nix = {
     optimise.automatic = true;
@@ -242,8 +243,8 @@ in
     flaresolverr.enable = true;
     spice-vdagentd.enable = true;
     journald.storage = "volatile";
-displayManager.gdm.enable = true;
-desktopManager.gnome.enable = true;
+    displayManager.gdm.enable = true;
+    desktopManager.gnome.enable = true;
 
     getty = {
       autologinUser = "n";
