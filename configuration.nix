@@ -79,9 +79,9 @@ let
   };
 
   dconfUserSettings = {
-    # "org/gnome/desktop/remote-desktop/rdp" = {
-    #    screen-share-mode = "extend";
-    # };
+    "org/gnome/desktop/remote-desktop/rdp" = {
+       screen-share-mode = "extend";
+    };
     "org/gnome/desktop/peripherals/touchpad" = {
       send-events = "disabled-on-external-mouse";
     };
