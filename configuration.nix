@@ -197,7 +197,7 @@ in
 
     firewall = {
       allowedTCPPorts = [
-        0800 # kodi remote
+        8000 # kodi remote (USER SET)
         3389 # GNOME RDP PORT
       ];
       allowedUDPPorts = [
