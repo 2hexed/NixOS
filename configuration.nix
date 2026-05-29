@@ -415,6 +415,7 @@ in
         peazip
 
         smassh
+        spotify
         vesktop
         ripgrep
         ani-cli
