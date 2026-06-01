@@ -1,8 +1,8 @@
 {
   inputs = {
-    snapcore.url = "github:snapsettle/snapcore";
     nixpkgs.url = "github:nixos/nixpkgs/nixos-25.11";
 
+    snapcore.url = "github:snapsettle/snapcore";
     treefmt-nix.url = "github:numtide/treefmt-nix";
   };
 
@@ -31,6 +31,10 @@
         modules = [
           ./configuration.nix
           inputs.snapcore.nixosModules.default
+
+          {
+            system.stateVersion = nixpkgs.lib.versions.majorMinor nixpkgs.lib.version;
+          }
         ];
       };
     };

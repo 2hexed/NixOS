@@ -10,7 +10,7 @@ let
   arrServiceACL = "d:group:${arrServiceGroup}:rwx,group:${arrServiceGroup}:rwx";
 
   arrServiceConfig = {
-    # Directory = User
+    # DIR = USER
     "Movies" = "radarr";
     "Music" = "lidarr";
     "Shows" = "sonarr";
@@ -57,8 +57,9 @@ let
     appindicator
     blur-my-shell
     ideapad-controls
-    removable-drive-menu
     night-theme-switcher
+    removable-drive-menu
+    openrgb-accent-color-sync
   ];
 
   sharedPolicies = {
@@ -146,7 +147,6 @@ in
   ];
 
   zramSwap.enable = true;
-  system.stateVersion = "25.11";
   time.timeZone = "Asia/Kolkata";
   nixpkgs.config.allowUnfree = true;
   systemd.tmpfiles.rules = mediaRules ++ laptopRules;
@@ -246,17 +246,8 @@ in
     displayManager.gdm.enable = true;
     desktopManager.gnome.enable = true;
 
-    getty = {
-      autologinUser = "n";
-      autologinOnce = true;
-    };
-
-    logind.settings = {
-      Login = {
-        HandleLidSwitch = "ignore";
-        HandleLidSwitchExternalPower = "ignore";
-        HandleLidSwitchDocked = "ignore";
-      };
+    hardware.openrgb = {
+      enable = true;
     };
 
     dashnix = {
@@ -265,7 +256,7 @@ in
       watchedServices = [
         "jellyfin"
         "qbittorrent"
-        "jellyseerr"
+        "seerr"
         "prowlarr"
         "bazarr"
         "whisparr"
@@ -286,12 +277,6 @@ in
     #     OLLAMA_NUM_PARALLEL = "1";
     #     OLLAMA_MAX_LOADED_MODELS = "1";
     #   };
-    # };
-
-    # xrdp = {
-    #   enable = true;
-    #   openFirewall = true;
-    #   defaultWindowManager = "exec ${pkgs.dbus}/bin/dbus-run-session ${pkgs.xfce.xfce4-session}/bin/xfce4-session";
     # };
 
     openssh = {
@@ -315,6 +300,7 @@ in
     };
 
     jellyseerr = {
+    # seerr = {
       enable = true;
       openFirewall = true;
     };
@@ -378,11 +364,6 @@ in
     };
 
     xserver = {
-      enable = false;
-      enableTearFree = true;
-      updateDbusEnvironment = true;
-      # desktopManager.xfce.enable = true;
-
       videoDrivers = [
         "nvidia"
       ];
@@ -411,12 +392,9 @@ in
     packages =
       with pkgs;
       [
-        # xdg-utils
         peazip
-
         smassh
         spotify
-        vesktop
         ripgrep
         ani-cli
         anydesk
@@ -428,7 +406,6 @@ in
         antigravity
         video-trimmer
         github-desktop
-        bitwarden-desktop
         inkscape-with-extensions
 
         # xfce4-whiskermenu-plugin
@@ -563,16 +540,9 @@ in
 
   environment = {
     systemPackages = with pkgs; [
-      bottom
       gparted
       (pkgs.callPackage /home/n/Documents/GitHub/synclyr2metadata/package.nix { })
     ];
-
-    # interactiveShellInit = ''
-    #   if [[ $(tty) == "/dev/tty1" ]]; then
-    #     exec btm
-    #   fi
-    # '';
 
     gnome.excludePackages = with pkgs; [
       yelp
@@ -581,4 +551,50 @@ in
     ];
   };
 
+  # specialisation.server.configuration = {
+  #   system.nixos.tags = [ "server" ];
+  #   systemd.services.gnome-remote-desktop.enable = lib.mkForce false;
+
+  #   services = {
+  #     pulseaudio.enable = true;
+  #     displayManager.gdm.enable = lib.mkForce false;
+  #     desktopManager.gnome.enable = lib.mkForce false;
+
+  #     xserver = {
+  #       desktopManager.xfce.enable = true;
+  #       desktopManger.kodi.enable = lib.mkForce false;
+  #     };
+
+  #     logind.settings = {
+  #       Login = {
+  #         HandleLidSwitch = "ignore";
+  #         HandleLidSwitchExternalPower = "ignore";
+  #         HandleLidSwitchDocked = "ignore";
+  #       };
+  #     };
+
+  #     getty = {
+  #       autologinUser = "n";
+  #       autologinOnce = true;
+  #     };
+  #   };
+
+  #   xrdp = {
+  #     enable = true;
+  #     openFirewall = true;
+  #     defaultWindowManager = "exec ${pkgs.dbus}/bin/dbus-run-session ${pkgs.xfce.xfce4-session}/bin/xfce4-session";
+  #   };
+
+  #   environment = {
+  #     systemPackages = with pkgs; [
+  #       bottom
+  #       xfce4-whiskermenu-plugin
+  #     ];
+  #     interactiveShellInit = ''
+  #       if [[ "$(tty)" == "/dev/tty1" ]]; then
+  #         exec btm
+  #       fi
+  #     '';
+  #   };
+  # };
 }
