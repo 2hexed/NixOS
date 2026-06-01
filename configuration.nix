@@ -59,7 +59,6 @@ let
     ideapad-controls
     night-theme-switcher
     removable-drive-menu
-    openrgb-accent-color-sync
   ];
 
   sharedPolicies = {
@@ -245,11 +244,6 @@ in
     journald.storage = "volatile";
     displayManager.gdm.enable = true;
     desktopManager.gnome.enable = true;
-
-    hardware.openrgb = {
-      enable = true;
-      # startupProfile = "default";
-    };
 
     dashnix = {
       enable = true;
