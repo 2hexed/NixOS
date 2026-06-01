@@ -248,6 +248,7 @@ in
 
     hardware.openrgb = {
       enable = true;
+      # startupProfile = "default";
     };
 
     dashnix = {
@@ -419,6 +420,7 @@ in
     nix-ld.enable = true;
     starship.enable = true;
     gitgetter.enable = true;
+    command-not-found.enable = true;
 
     fzf = {
       keybindings = true;
