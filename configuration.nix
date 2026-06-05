@@ -6,18 +6,6 @@
   ...
 }:
 let
-  arrServiceGroup = "qbittorrent";
-  arrServiceACL = "d:group:${arrServiceGroup}:rwx,group:${arrServiceGroup}:rwx";
-
-  arrServiceConfig = {
-    # DIR = USER
-    "Movies" = "radarr";
-    "Music" = "lidarr";
-    "Shows" = "sonarr";
-    "Porn" = "whisparr";
-    "Downloads" = arrServiceGroup;
-  };
-
   laptopRules = map (node: "z /sys/bus/platform/drivers/ideapad_acpi/*/${node} 0664 root users") [
     "conservation_mode"
     "camera_power"
@@ -26,19 +14,6 @@ let
     "touchpad"
     "usb_charging"
   ];
-
-  mediaRules = [
-    "Z /media 2775 ${arrServiceGroup} ${arrServiceGroup} -"
-    "A /media - - - - ${arrServiceACL}"
-  ]
-  ++ (builtins.concatLists (
-    builtins.attrValues (
-      builtins.mapAttrs (dir: owner: [
-        "Z /media/${dir} 2775 ${owner} ${arrServiceGroup} -"
-        "A /media/${dir} - - - - ${arrServiceACL}"
-      ]) arrServiceConfig
-    )
-  ));
 
   flattenDconf =
     path: attrs:
@@ -148,7 +123,7 @@ in
   zramSwap.enable = true;
   time.timeZone = "Asia/Kolkata";
   nixpkgs.config.allowUnfree = true;
-  systemd.tmpfiles.rules = mediaRules ++ laptopRules;
+  systemd.tmpfiles.rules = laptopRules;
   # disabledModules = [ "services/desktops/blueman.nix" ];
 
   # GNOME RDP FIX
@@ -167,7 +142,6 @@ in
 
     gc = {
       automatic = true;
-      dates = "daily";
       options = "--delete-older-than 7d";
     };
   };
@@ -238,49 +212,10 @@ in
   services = {
     fstrim.enable = true;
     usbmuxd.enable = true;
-    prowlarr.enable = true;
-    flaresolverr.enable = true;
     spice-vdagentd.enable = true;
     journald.storage = "volatile";
     displayManager.gdm.enable = true;
     desktopManager.gnome.enable = true;
-
-    dashnix = {
-      enable = true;
-      openFirewall = true;
-      watchedServices = [
-        "jellyfin"
-        "qbittorrent"
-        "seerr"
-        "prowlarr"
-        "bazarr"
-        "whisparr"
-        "sonarr"
-        "radarr"
-        "lidarr"
-      ];
-    };
-
-    # ollama = {
-    #   enable = true;
-    #   package = pkgs.ollama-cuda;
-    #   acceleration = "cuda";
-    #   loadModels = [ "qwen3.5:2b" ]; # [ "qwen2.5:7b" ]; # [ "deepseek-r1:7b" ];
-    #   syncModels = true;
-
-    #   environmentVariables = {
-    #     OLLAMA_NUM_PARALLEL = "1";
-    #     OLLAMA_MAX_LOADED_MODELS = "1";
-    #   };
-    # };
-
-    openssh = {
-      enable = true;
-      settings = {
-        # PasswordAuthentication = false;
-        PermitRootLogin = "no";
-      };
-    };
 
     avahi = {
       enable = true;
@@ -294,70 +229,6 @@ in
       };
     };
 
-    jellyseerr = {
-    # seerr = {
-      enable = true;
-      openFirewall = true;
-    };
-
-    jellyfin = {
-      enable = true;
-      openFirewall = true;
-    };
-
-    bazarr = {
-      enable = true;
-      group = arrServiceGroup;
-    };
-
-    whisparr = {
-      enable = true;
-      group = arrServiceGroup;
-    };
-
-    sonarr = {
-      enable = true;
-      group = arrServiceGroup;
-    };
-
-    radarr = {
-      enable = true;
-      group = arrServiceGroup;
-    };
-
-    lidarr = {
-      enable = true;
-      group = arrServiceGroup;
-    };
-
-    qbittorrent = {
-      enable = true;
-      group = arrServiceGroup;
-
-      serverConfig = {
-        BitTorrent = {
-          Session = {
-            MaxRatio = 0;
-            GlobalMaxRatio = 0;
-            MaxRatioEnabled = true;
-            MaxActiveTorrents = 10;
-            MaxActiveDownloads = 10;
-            ShareLimitAction = "Remove";
-            AddTorrentToTopOfQueue = true;
-            DefaultSavePath = "/media/Downloads";
-            TorrentContentLayout = "Subfolder";
-          };
-        };
-
-        Preferences = {
-          WebUI = {
-            AuthSubnetWhitelistEnabled = true;
-            AuthSubnetWhitelist = "127.0.0.1/32, ::1/128";
-          };
-        };
-      };
-    };
-
     xserver = {
       videoDrivers = [
         "nvidia"
@@ -368,6 +239,7 @@ in
         package = pkgs.kodi.withPackages (
           p: with p; [
             jellyfin
+            steam-launcher
           ]
         );
       };
@@ -418,6 +290,10 @@ in
 
     fzf = {
       keybindings = true;
+    };
+
+    steam = {
+      enable = true;
     };
 
     obs-studio = {
@@ -547,50 +423,17 @@ in
     ];
   };
 
-  # specialisation.server.configuration = {
-  #   system.nixos.tags = [ "server" ];
-  #   systemd.services.gnome-remote-desktop.enable = lib.mkForce false;
+  specialisation.server = {
+    inheritParentConfig = false;
 
-  #   services = {
-  #     pulseaudio.enable = true;
-  #     displayManager.gdm.enable = lib.mkForce false;
-  #     desktopManager.gnome.enable = lib.mkForce false;
-
-  #     xserver = {
-  #       desktopManager.xfce.enable = true;
-  #       desktopManger.kodi.enable = lib.mkForce false;
-  #     };
-
-  #     logind.settings = {
-  #       Login = {
-  #         HandleLidSwitch = "ignore";
-  #         HandleLidSwitchExternalPower = "ignore";
-  #         HandleLidSwitchDocked = "ignore";
-  #       };
-  #     };
-
-  #     getty = {
-  #       autologinUser = "n";
-  #       autologinOnce = true;
-  #     };
-  #   };
-
-  #   xrdp = {
-  #     enable = true;
-  #     openFirewall = true;
-  #     defaultWindowManager = "exec ${pkgs.dbus}/bin/dbus-run-session ${pkgs.xfce.xfce4-session}/bin/xfce4-session";
-  #   };
-
-  #   environment = {
-  #     systemPackages = with pkgs; [
-  #       bottom
-  #       xfce4-whiskermenu-plugin
-  #     ];
-  #     interactiveShellInit = ''
-  #       if [[ "$(tty)" == "/dev/tty1" ]]; then
-  #         exec btm
-  #       fi
-  #     '';
-  #   };
-  # };
+    configuration = {
+      imports = [
+        ./server.nix
+        ./hardware-configuration.nix
+      ];
+    }
+    // {
+      system.nixos.tags = [ "server" ];
+    };
+  };
 }
