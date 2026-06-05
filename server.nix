@@ -44,8 +44,7 @@ in
     prowlarr.enable = true;
     flaresolverr.enable = true;
 
-    jellyseerr = {
-      # seerr = {
+    seerr = {
       enable = true;
       openFirewall = true;
     };
@@ -116,7 +115,7 @@ in
     xrdp = {
       enable = true;
       openFirewall = true;
-      defaultWindowManager = "exec ${pkgs.dbus}/bin/dbus-run-session ${pkgs.xfce.xfce4-session}/bin/xfce4-session";
+      defaultWindowManager = "exec ${pkgs.dbus}/bin/dbus-run-session ${pkgs.xfce4-session}/bin/xfce4-session";
     };
 
     # LAPTOPS ONLY
@@ -173,7 +172,7 @@ in
   environment = {
     systemPackages = with pkgs; [
       bottom
-      xfce.xfce4-whiskermenu-plugin
+      xfce4-whiskermenu-plugin
     ];
     interactiveShellInit = ''
       if [[ "$(tty)" == "/dev/tty1" ]]; then
