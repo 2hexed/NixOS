@@ -40,6 +40,30 @@ in
     useXkbConfig = true;
   };
 
+  users.users.server-guy = {
+    isNormalUser = true;
+    description = "Server Guy";
+    initialPassword = "serverguydontplaywithme";
+
+    extraGroups = [
+      "wheel"
+      "networkmanager"
+    ];
+  };
+
+  environment = {
+    systemPackages = with pkgs; [
+      bottom
+      xfce4-whiskermenu-plugin
+    ];
+
+    interactiveShellInit = ''
+      if [[ "$(tty)" == "/dev/tty1" ]]; then
+        exec btm
+      fi
+    '';
+  };
+
   services = {
     prowlarr.enable = true;
     flaresolverr.enable = true;
@@ -80,7 +104,7 @@ in
     };
 
     getty = {
-      autologinUser = "n";
+      autologinUser = "server-guy";
       autologinOnce = true;
     };
 
@@ -168,17 +192,4 @@ in
       };
     };
   };
-
-  environment = {
-    systemPackages = with pkgs; [
-      bottom
-      xfce4-whiskermenu-plugin
-    ];
-    interactiveShellInit = ''
-      if [[ "$(tty)" == "/dev/tty1" ]]; then
-        exec btm
-      fi
-    '';
-  };
-
 }
