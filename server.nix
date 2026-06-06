@@ -33,7 +33,7 @@ let
 in
 {
   imports = [ inputs.snapcore.nixosModules.default ];
-  
+
   systemd.tmpfiles.rules = mediaRules;
   networking.networkmanager.enable = true;
 
