@@ -422,7 +422,7 @@ in
     ];
   };
 
-  specialisation.server = {
+  specialisation.Server = {
     inheritParentConfig = false;
 
     configuration = {
@@ -433,6 +433,7 @@ in
     }
     // {
       system.nixos.tags = [ "server" ];
+      networking.hostName = "snowflake-ideapad";
     };
   };
 }
