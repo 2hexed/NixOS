@@ -6,6 +6,7 @@
   ...
 }:
 let
+  adminUsername = "admin";
   arrServiceGroup = "qbittorrent";
   arrServiceACL = "d:group:${arrServiceGroup}:rwx,group:${arrServiceGroup}:rwx";
 
@@ -42,7 +43,7 @@ in
     useXkbConfig = true;
   };
 
-  users.users.admin = {
+  users.users.${adminUsername} = {
     isNormalUser = true;
     description = "Server Admin";
     initialPassword = "admin"; # Run: passwd or mkpasswd and set a password
@@ -106,7 +107,7 @@ in
     };
 
     getty = {
-      autologinUser = "server-guy";
+      autologinUser = adminUsername;
       autologinOnce = true;
     };
 
