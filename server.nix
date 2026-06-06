@@ -33,17 +33,19 @@ let
 in
 {
   imports = [ inputs.snapcore.nixosModules.default ];
+  
   systemd.tmpfiles.rules = mediaRules;
+  networking.networkmanager.enable = true;
 
   console = {
     font = "Lat2-Terminus16";
     useXkbConfig = true;
   };
 
-  users.users.server-guy = {
+  users.users.admin = {
     isNormalUser = true;
-    description = "Server Guy";
-    initialPassword = "serverguydontplaywithme";
+    description = "Server Admin";
+    initialPassword = "admin";
 
     extraGroups = [
       "wheel"
@@ -112,11 +114,29 @@ in
       desktopManager.xfce.enable = true;
     };
 
+    xrdp = {
+      enable = true;
+      openFirewall = true;
+      defaultWindowManager = "exec ${pkgs.dbus}/bin/dbus-run-session ${pkgs.xfce4-session}/bin/xfce4-session";
+    };
+
     openssh = {
       enable = true;
       settings = {
         # PasswordAuthentication = false;
         PermitRootLogin = "no";
+      };
+    };
+
+    avahi = {
+      enable = true;
+      nssmdns4 = true;
+      nssmdns6 = true;
+
+      publish = {
+        enable = true;
+        addresses = true;
+        workstation = true;
       };
     };
 
@@ -134,12 +154,6 @@ in
         "radarr"
         "lidarr"
       ];
-    };
-
-    xrdp = {
-      enable = true;
-      openFirewall = true;
-      defaultWindowManager = "exec ${pkgs.dbus}/bin/dbus-run-session ${pkgs.xfce4-session}/bin/xfce4-session";
     };
 
     # LAPTOPS ONLY

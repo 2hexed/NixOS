@@ -211,22 +211,9 @@ in
   services = {
     fstrim.enable = true;
     usbmuxd.enable = true;
-    spice-vdagentd.enable = true;
     journald.storage = "volatile";
     displayManager.gdm.enable = true;
     desktopManager.gnome.enable = true;
-
-    avahi = {
-      enable = true;
-      nssmdns4 = true;
-      nssmdns6 = true;
-
-      publish = {
-        enable = true;
-        addresses = true;
-        workstation = true;
-      };
-    };
 
     xserver = {
       videoDrivers = [
@@ -283,13 +270,10 @@ in
   programs = {
     git.enable = true;
     nix-ld.enable = true;
+    fzf.keybindings = true;
     starship.enable = true;
     gitgetter.enable = true;
     command-not-found.enable = true;
-
-    fzf = {
-      keybindings = true;
-    };
 
     steam = {
       enable = true;
