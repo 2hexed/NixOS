@@ -117,6 +117,7 @@ in
   imports = [
     ./hardware-configuration.nix
     ./google-chrome.nix
+    ./server.nix
   ];
 
   zramSwap.enable = true;

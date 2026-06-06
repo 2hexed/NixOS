@@ -28,9 +28,9 @@
       nixosConfigurations.snowflake-ideapad = nixpkgs.lib.nixosSystem {
         inherit system;
         specialArgs = { inherit inputs; };
+
         modules = [
           ./configuration.nix
-          inputs.snapcore.nixosModules.default
 
           {
             system.stateVersion = nixpkgs.lib.versions.majorMinor nixpkgs.lib.version;

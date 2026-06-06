@@ -45,7 +45,7 @@ in
   users.users.admin = {
     isNormalUser = true;
     description = "Server Admin";
-    initialPassword = "admin";
+    initialPassword = "admin"; # Run: passwd or mkpasswd and set a password
 
     extraGroups = [
       "wheel"
@@ -143,6 +143,7 @@ in
     dashnix = {
       enable = true;
       openFirewall = true;
+
       watchedServices = [
         "jellyfin"
         "qbittorrent"
