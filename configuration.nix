@@ -233,7 +233,10 @@ in
     };
   };
 
-  users.users.n = {
+  users = {
+    mutableUsers = false;
+    
+    users.n = {
     isNormalUser = true;
     description = "Nick";
     initialPassword = "nicepassword69"; # passwd or mkpasswd
@@ -266,6 +269,7 @@ in
         # xfce.xfce4-whiskermenu-plugin
       ]
       ++ gnomeUserExtensions;
+    };
   };
 
   programs = {
