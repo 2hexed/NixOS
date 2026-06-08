@@ -235,40 +235,40 @@ in
 
   users = {
     mutableUsers = false;
-    
+
     users.n = {
-    isNormalUser = true;
-    description = "Nick";
-    initialPassword = "nicepassword69"; # passwd or mkpasswd
+      isNormalUser = true;
+      description = "Nick";
+      initialPassword = "nicepassword69"; # passwd or mkpasswd
 
-    extraGroups = [
-      "wheel"
-      "networkmanager"
-    ];
+      extraGroups = [
+        "wheel"
+        "networkmanager"
+      ];
 
-    packages =
-      with pkgs;
-      [
-        peazip
-        smassh
-        spotify
-        ripgrep
-        ani-cli
-        anydesk
-        lmstudio
-        flowblade
-        shortwave
-        manga-tui
-        vscode-fhs
-        antigravity
-        video-trimmer
-        github-desktop
-        inkscape-with-extensions
+      packages =
+        with pkgs;
+        [
+          peazip
+          smassh
+          spotify
+          ripgrep
+          ani-cli
+          anydesk
+          lmstudio
+          flowblade
+          shortwave
+          manga-tui
+          vscode-fhs
+          antigravity
+          video-trimmer
+          github-desktop
+          inkscape-with-extensions
 
-        # xfce4-whiskermenu-plugin
-        # xfce.xfce4-whiskermenu-plugin
-      ]
-      ++ gnomeUserExtensions;
+          # xfce4-whiskermenu-plugin
+          # xfce.xfce4-whiskermenu-plugin
+        ]
+        ++ gnomeUserExtensions;
     };
   };
 
